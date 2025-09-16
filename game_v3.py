@@ -5,22 +5,30 @@
 import numpy as np
 
 
-def random_predict(number: int = 1) -> int:
-    """Рандомно угадываем число
-
+def game_core_v3(number: int = 1) -> int:
+    """
+    Функция находит число путём деления интервалов пополам.
+    
     Args:
         number (int, optional): Загаданное число. Defaults to 1.
 
     Returns:
         int: Число попыток
     """
-    count = 0
+    count = 1
+    predict = 50
+    prev_predict = 100
 
-    while True:
+    while predict != number:
+
         count += 1
-        predict_number = np.random.randint(1, 101)  # предполагаемое число
-        if number == predict_number:
-            break  # выход из цикла если угадали
+
+        if predict > number:
+            prev_predict = predict
+            predict //= 2
+        else:
+            predict = predict + (prev_predict - predict) // 2 + int(not (prev_predict - predict) // 2)
+
     return count
 
 
@@ -47,4 +55,4 @@ def score_game(random_predict) -> int:
 
 if __name__ == "__main__":
     # RUN
-    score_game(random_predict)
+    score_game(game_core_v3)
